@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Study Scratch Card</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  background: #f2f7ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  width: 320px;
+  height: 420px;
+  background: linear-gradient(135deg, #fff7cc, #d9ecff);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.card h2 {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+.reward {
+  position: absolute;
+  top: 120px;
+  width: 100%;
+  color: #0a7c2f;
+}
+
+.reward h1 {
+  font-size: 32px;
+  margin: 10px 0;
+}
+
+.reward p {
+  font-size: 16px;
+}
+
+canvas {
+  position: absolute;
+  top: 100px;
+  left: 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>🎁 SMART STUDY SCRATCH CARD 🎁<br>Scratch & Win</h2>
+
+  <div class="reward">
+    <p>🎊 CONGRATULATIONS 🎊</p>
+    <h1>100% DISCOUNT</h1>
+    <p>on ANY COURSE FEES</p>
+  </div>
+
+  <canvas id="scratchCanvas" width="320" height="260"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById("scratchCanvas");
+const ctx = canvas.getContext("2d");
+
+ctx.fillStyle = "#bfbfbf";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.font = "20px Arial";
+ctx.fillStyle = "#555";
+ctx.textAlign = "center";
+ctx.fillText("👉 এখানে স্ক্র্যাচ করো 👈", canvas.width/2, canvas.height/2);
+
+ctx.globalCompositeOperation = "destination-out";
+
+let isDrawing = false;
+
+function start(e) {
+  isDrawing = true;
+  draw(e);
+}
+
+function end() {
+  isDrawing = false;
+  ctx.beginPath();
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+  ctx.beginPath();
+  ctx.arc(x, y, 18, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+canvas.addEventListener("mousedown", start);
+canvas.addEventListener("mouseup", end);
+canvas.addEventListener("mousemove", draw);
+
+canvas.addEventListener("touchstart", start);
+canvas.addEventListener("touchend", end);
+canvas.addEventListener("touchmove", draw);
+</script>
+
+</body>
+</html>
